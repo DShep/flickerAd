@@ -5,35 +5,49 @@ ball = imread(fullfile(thisFolder,'ball.jpg'));
 matt = (double(rgb2gray(matt))-128)/128;
 ball = (double(rgb2gray(ball))-128)/128;
 
-sizeY = 400;
-sizeX = 400;
-
-matt = imresize(matt,[sizeY sizeX],'nearest');
-ball = imresize(ball,[sizeY sizeX],'nearest');
+matt = imresize(matt,1/4);
 
 keyQ = 81;
 
-% wID = Screen('OpenWindow',2);
+wID = Screen('OpenWindow',2);
 flipT = GetSecs();
 playMovie = 1;
 frame = 0;
 
-numFrames = 10000;
+numFrames = 60;
 timeToFlip = zeros(numFrames,1);
 frameStart = 0;
 
 
-bitMap = twoImageStim(matt,ball,20);
+bitMap = zeros([size(matt) 3]);
 
 while playMovie
     frameStart = GetSecs();
     frame = frame + 1;
 
+%     if mod(frame,2) == 0
+        bitMap(:,:,1) = matt;
+        bitMap(:,:,2) = -matt;
+        bitMap(:,:,3) = 0*matt;
+%     else
+%         bitMap(:,:,1) = -matt;
+%         bitMap(:,:,2) = matt;
+%         bitMap(:,:,3) = -matt;
+%     end
+
+    % find max value
+    maxVal = max(max(max(abs(bitMap))));
+    % normalize by max value
+    bitMap = bsxfun(@rdivide,bitMap,maxVal);
+
+    % convert bit map from contrast to 0 to 1
+    bitMap = 2/3*0.5*(bitMap+1);
+    % convert bitmap from 0 to 1 to 0 to 255
+    bitMap = 255*bitMap;
 
     wTex = Screen('MakeTexture', wID, bitMap);
     Screen('DrawTexture',wID,wTex,[],[0 0 608 684],[],0);
     flipT = Screen('Flip',wID,flipT+1/120);
-    Screen('Close',wTex);
 
     [~,~,keyList]=KbCheck; % check this once
     if keyList(keyQ)
@@ -44,12 +58,8 @@ while playMovie
     if mod(frame,60) == 0
         disp(['frame # ' num2str(frame)]);
     end
-    
-    % measure how long it takes to flip but, make sure we don't go over the
-    % size of the array and slow the program down
-    if timeToFlip <= numFrames
-        timeToFlip(frame) = GetSecs()-frameStart;
-    end
-end
 
-timeToFlip = timeToFlip(timeToFlip>0);
+    Screen('Close',wTex);
+    
+    timeToFlip(frame) = GetSecs()-frameStart;
+end
