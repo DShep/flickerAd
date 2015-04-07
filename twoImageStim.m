@@ -1,4 +1,6 @@
 function bitMap = twoImageStim(I1,I2,alpha)
+    % psychophysically this does't seem to work :(
+
     % the goal of this function is to create a bitmap such that when two
     % images A and B are summed they create I1, and if they are summed
     % while B is shifted by alpha they create I2.
@@ -88,9 +90,9 @@ function bitMap = twoImageStim(I1,I2,alpha)
     tSizeY = 5;
     
     % create first target
-    bitMap(tX:tX+tSizeX,tY:tY+tSizeY,:) = -1;
+    bitMap(tY:tY+tSizeY,tX:tX+tSizeX,:) = -1;
     % create the second target
-    bitMap(tX+alpha-1:tX+tSizeX+alpha-1,tY:tY+tSizeY,:) = -1;
+    bitMap(tY:tY+tSizeY,tX+alpha-1:tX+tSizeX+alpha-1,:) = -1;
     
     % convert bit map from contrast to 0 to 1
     bitMap = 0.5*(bitMap+1);
