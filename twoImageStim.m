@@ -1,4 +1,4 @@
-function bitMap = twoImageStim(I1,I2,alpha)
+function bitMap = twoImageStim(I1,I2,alpha,frame)
     % psychophysically this does't seem to work :(
 
     % the goal of this function is to create a bitmap such that when two
@@ -70,8 +70,16 @@ function bitMap = twoImageStim(I1,I2,alpha)
     
     % initialize bitMap
     bitMap = zeros([size(I1) 3]);
-    bitMap(:,:,1) = A;
-    bitMap(:,:,2) = B;
+    
+    if mod(frame,2) == 0
+        bitMap(:,:,1) = A;
+        bitMap(:,:,2) = B;
+        bitMap(:,:,3) = A;
+    else
+        bitMap(:,:,1) = B;
+        bitMap(:,:,2) = A;
+        bitMap(:,:,3) = B;
+    end
     
     % the projector has a limited contrast so make sure you don't clip.
     % Potentially consider clipping if there are a small number of pixels
@@ -96,6 +104,4 @@ function bitMap = twoImageStim(I1,I2,alpha)
     
     % convert bit map from contrast to 0 to 1
     bitMap = 0.5*(bitMap+1);
-    % convert bitmap from 0 to 1 to 0 to 255
-    bitMap = 255*bitMap;
 end

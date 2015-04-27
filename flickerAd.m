@@ -11,7 +11,7 @@ sizeX = 400;
 I1 = imresize(I1,[sizeY sizeX],'nearest');
 I2 = imresize(I2,[sizeY sizeX],'nearest');
 
-flickerDLP('bitDepth',8);
+flickerDLP('bitDepth',7);
 
 keyQ = 81;
 
@@ -25,18 +25,16 @@ timeToFlip = zeros(numFrames,1);
 frameStart = 0;
 
 
-
-
-
 while playMovie
     frameStart = GetSecs();
     frame = frame + 1;
-
-%     bitMap = twoImageStim(I1,I2,50);
+%     bitMap = twoImageStim(I1,I2,50,frame);
     bitMap = twoImageInvert60hz(I1,I2,frame);
-%     bitMap = twoImageInvert(I1,I2);
-    
-    wTex = Screen('MakeTexture', wID, bitMap);
+%     bitMap = twoImageInvert120hz(I1,I2);
+%     bitMap = twoImageInvert180hz(I1,I2,frame);
+%     bitMap = ABnegB(I1,I2);
+    wTex = flickMakeTexture(bitMap,wID);
+
     Screen('DrawTexture',wID,wTex,[],[0 0 608 684],[],0);
     flipT = Screen('Flip',wID,flipT+1/120);
     Screen('Close',wTex);

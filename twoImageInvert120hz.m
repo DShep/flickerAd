@@ -8,8 +8,8 @@ function bitMap = twoImageInvert120hz(I1,I2)
     end
 
     bitMap = zeros([size(I1) 3]);
-    bitMap(:,:,1) = I1+I2;
-    bitMap(:,:,2) = I1-I2;
+    bitMap(:,:,2) = I1+I2;
+    bitMap(:,:,3) = I1-I2;
     
     maxVal = max(max(max(abs(bitMap))));
     % normalize by max value
@@ -17,6 +17,4 @@ function bitMap = twoImageInvert120hz(I1,I2)
     
     % convert bit map from contrast to 0 to 1
     bitMap = 0.5*(bitMap+1);
-    % convert bitmap from 0 to 1 to 0 to 255
-    bitMap = 255*bitMap;
 end

@@ -19,6 +19,4 @@ function bitMap = twoImageInvert(I1,I2)
     
     % convert bit map from contrast to 0 to 1
     bitMap = 0.5*(bitMap+1);
-    % convert bitmap from 0 to 1 to 0 to 255
-    bitMap = 255*bitMap;
 end
