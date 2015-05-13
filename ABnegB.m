@@ -1,4 +1,4 @@
-function bitMap = twoImageInvert(I1,I2)
+function bitMap = ABnegB(I1,I2)
     % goal of this is to present one image with an hidden image over it
 
     % make sure the two images are the same size

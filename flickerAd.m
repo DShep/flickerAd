@@ -21,6 +21,14 @@ stimCount = 0;
 plotTracer = 0;
 initialized = 0;
 
+% initialize tracer values
+tracerDist = 100;
+tracerMean = 200;
+tracerFreq = 45;
+tracerX = 200;
+tracerSizeX = 10;
+tracerSizeY = 10;
+tracerY = 300;
 
 while playMovie
     frameStart = GetSecs();
@@ -39,21 +47,8 @@ while playMovie
             end
             
             bitMap = ABnegB(I1,I2);
-        case 1
-            if ~initialized
-                I1 = imread(fullfile(thisFolder,'gray.jpg'));
-                I2 = imread(fullfile(thisFolder,'yale.jpg'));
-
-                [I1,I2] = NormImage(I1,I2);
-
-                flickerDLP('bitDepth',8);
-                initialized = 1;
-            end
-            
-%             bitMap = twoImageInvert180hz(I1,I2,frame);
-            bitMap = twoImageInvert120hz(I1,I2);
         
-        case 2
+        case 1
             if ~initialized
                 I1 = imread(fullfile(thisFolder,'yaleSML.jpg'));
                 I2 = imread(fullfile(thisFolder,'yale.jpg'));
@@ -65,21 +60,8 @@ while playMovie
             end
             
             bitMap = ABnegB(I1,I2);
-        
-        case 3
-            if ~initialized
-                I1 = imread(fullfile(thisFolder,'yaleSML.jpg'));
-                I2 = imread(fullfile(thisFolder,'yale.jpg'));
-
-                [I1,I2] = NormImage(I1,I2);
-
-                flickerDLP('bitDepth',8);
-                initialized = 1;
-            end
             
-            bitMap = twoImageInvert120hz(I1,I2);
-            
-        case 4
+        case 2
             if ~initialized
                 I1 = imread(fullfile(thisFolder,'yaleSML.jpg'));
                 I2 = imread(fullfile(thisFolder,'yale.jpg'));
@@ -93,7 +75,7 @@ while playMovie
             I1 = circshift(I1,[0 1]);
             bitMap = ABnegB(I1,I2);
             
-        case 5
+        case 3
             if ~initialized
                 I1 = imread(fullfile(thisFolder,'yaleSML.jpg'));
                 I2 = imread(fullfile(thisFolder,'yale.jpg'));
@@ -106,6 +88,11 @@ while playMovie
             
             I2 = circshift(I2,[0 -1]);
             bitMap = ABnegB(I1,I2);
+    end
+    
+    if plotTracer
+        tracerX = round(tracerDist*sin(2*pi*frame/tracerFreq)+tracerMean);
+        bitMap(tracerY:tracerY+tracerSizeY,tracerX:tracerX+tracerSizeX) = 0;
     end
     
     wTex = flickMakeTexture(bitMap,wID);
@@ -156,7 +143,7 @@ while playMovie
         end
     end
     
-    stimCount = mod(stimCount,6);
+    stimCount = mod(stimCount,4);
 end
 
 timeToFlip = timeToFlip(timeToFlip>0);
